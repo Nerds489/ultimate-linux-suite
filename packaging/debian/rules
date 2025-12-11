@@ -3,9 +3,17 @@
 %:
 	dh $@
 
+# Use build.sh for cleanup but never fail if it can't clean something
 override_dh_auto_clean:
 	./build.sh clean || true
 
-# IMPORTANT: avoid infinite loop with dpkg-buildpackage
+# CRITICAL: prevent dpkg-buildpackage -> dh_auto_build -> make -> build.sh all -> dpkg-buildpackage loop
+# There is nothing to compile; this project is just scripts.
 override_dh_auto_build:
-	@echo "Skipping dh_auto_build (no compile step needed)."
+	@echo "Skipping dh_auto_build (no compile step required for ultimate-linux-suite)."
+
+# If you already have a custom override_dh_auto_install, keep it.
+# If not, either leave this commented out or add a simple install step that does NOT call dpkg-buildpackage.
+# Example (only if needed):
+# override_dh_auto_install:
+#	@echo "No auto_install step; install handled by dh_install + debian/*.install"

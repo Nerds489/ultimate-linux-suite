@@ -11,6 +11,12 @@
 
 set -euo pipefail
 
+# Avoid dpkg-buildpackage recursion: if we are already inside a Debian build,
+# don't let build.sh call dpkg-buildpackage again.
+if [ "${ULS_INSIDE_DPKG_BUILD:-0}" = "1" ]; then
+    export ULS_SKIP_DPKG_RECURSION=1
+fi
+
 # Get script directory (repo root)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -98,8 +104,13 @@ EOF
 build_deb() {
     log_info "Building .deb package..."
 
-    # RECURSION GUARD: Prevent infinite loop when called from within dpkg-buildpackage.
-    # dpkg-buildpackage sets DEB_BUILD_ARCH. If set, we're already inside a Debian build.
+    # RECURSION GUARD: Check if we should skip dpkg-buildpackage call
+    if [ "${ULS_SKIP_DPKG_RECURSION:-0}" = "1" ]; then
+        log_info "Already inside dpkg-buildpackage context; skipping recursive dpkg-buildpackage call."
+        return 0
+    fi
+
+    # Additional guard: dpkg-buildpackage sets DEB_BUILD_ARCH
     if [[ -n "${DEB_BUILD_ARCH:-}" ]]; then
         log_info "Detected DEB_BUILD_ARCH='$DEB_BUILD_ARCH' - already inside dpkg-buildpackage."
         log_info "Skipping nested dpkg-buildpackage call to prevent recursion."
