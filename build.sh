@@ -267,10 +267,10 @@ clean_build() {
         done
     done
 
-    # Remove debian symlink if it's a symlink (not a real directory)
-    if [[ -L "$SCRIPT_DIR/debian" ]]; then
-        log_cmd "rm $SCRIPT_DIR/debian (symlink)"
-        rm -f "$SCRIPT_DIR/debian"
+    # Remove debian symlink if it exists (tolerant of already-removed state)
+    if [[ -L "$SCRIPT_DIR/debian" || -e "$SCRIPT_DIR/debian" ]]; then
+        log_cmd "rm $SCRIPT_DIR/debian"
+        rm -rf "$SCRIPT_DIR/debian" 2>/dev/null || true
         ((cleaned++))
     fi
 

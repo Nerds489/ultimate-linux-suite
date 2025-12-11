@@ -6,8 +6,7 @@
 	dh $@
 
 override_dh_auto_clean:
-	@echo "Skipping auto clean (not needed for shell-only project)"
-	true
+	./build.sh clean || true
 
 override_dh_auto_install:
 	# Create installation directories
