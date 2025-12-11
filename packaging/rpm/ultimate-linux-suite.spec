@@ -154,17 +154,12 @@ if [ -f completions/ultimate-suite.fish ]; then
         %{buildroot}%{_datadir}/fish/vendor_completions.d/ultimate-suite.fish
 fi
 
-# Install documentation
-install -d %{buildroot}%{_datadir}/doc/%{name}
-install -m 644 docs/APPS.md %{buildroot}%{_datadir}/doc/%{name}/
-install -m 644 docs/DRIVERS.md %{buildroot}%{_datadir}/doc/%{name}/
-install -m 644 docs/OPTIMIZATION.md %{buildroot}%{_datadir}/doc/%{name}/
-install -m 644 docs/RECOVERY.md %{buildroot}%{_datadir}/doc/%{name}/
-install -m 644 docs/USAGE.md %{buildroot}%{_datadir}/doc/%{name}/
+# Documentation is handled by %doc directive in %files section
+# Do NOT manually install docs here to avoid duplicate file entries
 
 %files
 %license LICENSE
-%doc README.md CHANGELOG.md
+%doc README.md CHANGELOG.md docs/APPS.md docs/DRIVERS.md docs/OPTIMIZATION.md docs/RECOVERY.md docs/USAGE.md
 %{_bindir}/ultimate-linux-suite
 %{_bindir}/ultimate-suite
 %{_datadir}/%{name}/
@@ -174,11 +169,6 @@ install -m 644 docs/USAGE.md %{buildroot}%{_datadir}/doc/%{name}/
 %{_datadir}/zsh/site-functions/_ultimate-suite
 %{_datadir}/fish/vendor_completions.d/ultimate-linux-suite.fish
 %{_datadir}/fish/vendor_completions.d/ultimate-suite.fish
-%{_datadir}/doc/%{name}/APPS.md
-%{_datadir}/doc/%{name}/DRIVERS.md
-%{_datadir}/doc/%{name}/OPTIMIZATION.md
-%{_datadir}/doc/%{name}/RECOVERY.md
-%{_datadir}/doc/%{name}/USAGE.md
 
 %post
 echo "Ultimate Linux Suite installed successfully."

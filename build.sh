@@ -267,12 +267,9 @@ clean_build() {
         done
     done
 
-    # Remove debian symlink if it exists (tolerant of already-removed state)
-    if [[ -L "$SCRIPT_DIR/debian" || -e "$SCRIPT_DIR/debian" ]]; then
-        log_cmd "rm $SCRIPT_DIR/debian"
-        rm -rf "$SCRIPT_DIR/debian" 2>/dev/null || true
-        ((cleaned++))
-    fi
+    # NOTE: Do NOT remove the debian symlink here - it breaks dpkg-buildpackage
+    # when dh_auto_clean calls this script. The debian symlink is intentionally
+    # preserved to allow the build to complete.
 
     # Clean any local .deb or .rpm files
     for file in "$SCRIPT_DIR"/*.deb "$SCRIPT_DIR"/*.rpm; do
