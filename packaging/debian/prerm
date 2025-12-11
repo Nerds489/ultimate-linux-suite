@@ -1,0 +1,23 @@
+#!/bin/bash
+# Ultimate Linux Suite Pre-Removal Script
+
+set -e
+
+case "$1" in
+    remove|upgrade|deconfigure)
+        # Remove symlink
+        if [ -L /usr/bin/ultimate-suite ]; then
+            rm -f /usr/bin/ultimate-suite
+        fi
+        ;;
+
+    failed-upgrade)
+        ;;
+
+    *)
+        echo "prerm called with unknown argument '$1'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

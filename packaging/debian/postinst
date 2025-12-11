@@ -1,0 +1,35 @@
+#!/bin/bash
+# Ultimate Linux Suite Post-Installation Script
+
+set -e
+
+case "$1" in
+    configure)
+        # Ensure proper permissions
+        chmod 755 /usr/share/ultimate-linux-suite/ultimate-suite
+
+        # Create symlink if not exists
+        if [ ! -L /usr/bin/ultimate-suite ]; then
+            ln -sf /usr/share/ultimate-linux-suite/ultimate-suite /usr/bin/ultimate-suite
+        fi
+
+        # Create driver vault directories with proper permissions
+        for dir in realtek-r8152 realtek-r8821cu broadcom nvidia amd intel; do
+            mkdir -p /usr/share/ultimate-linux-suite/drivers/$dir
+            chmod 755 /usr/share/ultimate-linux-suite/drivers/$dir
+        done
+
+        echo "Ultimate Linux Suite installed successfully."
+        echo "Run 'ultimate-suite' to start."
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument '$1'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

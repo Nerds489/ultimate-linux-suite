@@ -1,0 +1,21 @@
+ultimate-linux-suite (1.0.0-1) unstable; urgency=medium
+
+  * Initial release
+  * Core system optimization engine
+  * Multi-distribution support (Debian, Ubuntu, Fedora, Arch, openSUSE)
+  * Hardware detection and profiling
+  * System performance tuning with sysctl management
+  * Application installer with queue management
+  * Flatpak and Snap integration
+  * Driver management for Realtek and Broadcom devices
+  * GPU driver guidance (non-aggressive)
+  * DKMS module management
+  * System recovery and repair tools
+  * Package manager repair utilities
+  * Initramfs regeneration support
+  * Bootloader (GRUB) management
+  * Network repair tools
+  * System health checks
+  * Backup and restore functionality
+
+ -- Ultimate Linux Suite Team <support@example.com>  Wed, 11 Dec 2024 12:00:00 +0000

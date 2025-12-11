@@ -1,0 +1,66 @@
+# Logs and temp files
+*.log
+logs/
+tmp/
+*.tmp
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.*.swp
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+dist/
+build/
+*.egg-info/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Packaging artifacts
+*.deb
+*.rpm
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.build
+*.changes
+*.dsc
+
+# Debian build directories
+debian/ultimate-linux-suite/
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+obj-*/
+
+# RPM build directories
+rpmbuild/
+BUILDROOT/
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Local configuration overrides
+.env
+.env.local
+*.local.sh
+
+# Suite runtime files
+.suite-backups/
+.suite-cache/
