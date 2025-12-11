@@ -5,6 +5,7 @@ Ultimate Linux Suite provides comprehensive system recovery, repair tools, and b
 ## Overview
 
 The recovery module includes:
+
 - System health checks
 - Package manager repair
 - Initramfs regeneration
@@ -13,103 +14,175 @@ The recovery module includes:
 - Network repair
 - Backup and restore
 
+## Accessing Recovery Tools
+
+### Interactive Menu
+
+```bash
+sudo ultimate-linux-suite
+# Navigate to: Recovery & Tools
+```
+
+Or using the alias:
+
+```bash
+sudo ultimate-suite
+# Navigate to: Recovery & Tools
+```
+
 ## System Health Check
 
-Comprehensive diagnostics for system status:
+Comprehensive diagnostics for system status.
 
 ### Checks Performed
-- **Disk Space**: Warning at 80%, critical at 90%
-- **Memory**: Available memory percentage
-- **Swap**: Configuration status
-- **Failed Services**: Systemd service status
-- **Package Manager**: Broken packages detection
-- **Network**: Internet connectivity test
+
+| Check | Warning | Critical |
+|-------|---------|----------|
+| Disk Space | 80% used | 90% used |
+| Memory | Low available | Out of memory |
+| Swap | Not configured | Swap full |
+| Services | Failed services | Critical failures |
+| Packages | Broken packages | Corrupted database |
+| Network | DNS issues | No connectivity |
 
 ### Running Health Check
-```bash
-# Interactive
-ultimate-suite
-# Navigate to: Recovery & Tools > System Health Check
 
-# CLI
-ultimate-suite --recovery health
-```
+From the menu: Recovery & Tools > System Health Check
 
 ## Package Manager Repair
 
-Fixes common package manager issues:
+Fixes common package manager issues across distributions.
 
 ### APT (Debian/Ubuntu)
-- Removes lock files
-- Configures pending packages (`dpkg --configure -a`)
-- Fixes broken dependencies (`apt --fix-broken install`)
-- Updates package lists
-- Cleans cache
+
+Operations performed:
+
+1. Remove stale lock files
+2. Configure pending packages (`dpkg --configure -a`)
+3. Fix broken dependencies (`apt --fix-broken install`)
+4. Update package lists
+5. Clean package cache
+
+Manual commands:
+
+```bash
+# Remove locks
+sudo rm -f /var/lib/apt/lists/lock
+sudo rm -f /var/cache/apt/archives/lock
+sudo rm -f /var/lib/dpkg/lock*
+
+# Fix packages
+sudo dpkg --configure -a
+sudo apt --fix-broken install
+sudo apt update
+sudo apt clean
+```
 
 ### DNF (Fedora)
-- Cleans all caches
-- Rebuilds cache
-- Runs distro-sync
-- Removes orphan packages
+
+Operations performed:
+
+1. Clean all caches
+2. Rebuild cache
+3. Run distro-sync
+4. Remove orphan packages
+
+Manual commands:
+
+```bash
+sudo dnf clean all
+sudo dnf makecache
+sudo dnf distro-sync
+sudo dnf autoremove
+```
 
 ### Pacman (Arch)
-- Removes database lock
-- Updates keyring
-- Force refreshes package database
-- Checks for dependency issues
+
+Operations performed:
+
+1. Remove database lock
+2. Update keyring
+3. Force refresh database
+4. Check dependencies
+
+Manual commands:
+
+```bash
+sudo rm -f /var/lib/pacman/db.lck
+sudo pacman -Sy archlinux-keyring
+sudo pacman -Syyu
+sudo pacman -Dk
+```
 
 ### Zypper (openSUSE)
-- Cleans all caches
-- Refreshes repositories
-- Verifies system integrity
+
+Operations performed:
+
+1. Clean all caches
+2. Refresh repositories
+3. Verify system integrity
+
+Manual commands:
+
+```bash
+sudo zypper clean -a
+sudo zypper refresh
+sudo zypper verify
+```
 
 ## Initramfs Regeneration
 
-Rebuilds the initial RAM filesystem (initramfs/initrd):
+Rebuilds the initial RAM filesystem (initramfs/initrd).
 
 ### When to Regenerate
+
 - After installing new kernel modules
 - After driver changes
 - After boot issues
 - After filesystem changes
 
-### Distribution-Specific Tools
+### Distribution-Specific Commands
+
 | Distribution | Tool | Command |
 |--------------|------|---------|
-| Debian/Ubuntu | update-initramfs | `update-initramfs -u -k $(uname -r)` |
-| Fedora/RHEL | dracut | `dracut --force` |
-| Arch | mkinitcpio | `mkinitcpio -P` |
+| Debian/Ubuntu | update-initramfs | `sudo update-initramfs -u -k $(uname -r)` |
+| Fedora/RHEL | dracut | `sudo dracut --force` |
+| Arch | mkinitcpio | `sudo mkinitcpio -P` |
+| openSUSE | dracut | `sudo dracut --force` |
 
-### Using the Recovery Menu
-```bash
-# Navigate to: Recovery & Tools > Repair Tools > Regenerate Initramfs
-```
+### From the Menu
+
+Recovery & Tools > Repair Tools > Regenerate Initramfs
 
 ## DKMS Module Rebuild
 
-Rebuilds all Dynamic Kernel Module Support (DKMS) modules:
+Rebuilds all Dynamic Kernel Module Support (DKMS) modules.
 
 ### When to Rebuild
+
 - After kernel updates
 - After module compilation failures
 - When modules don't load properly
 
 ### Commands
+
 ```bash
 # List all DKMS modules
 dkms status
 
-# Rebuild all modules
-dkms autoinstall
+# Rebuild all modules for current kernel
+sudo dkms autoinstall
 
 # Rebuild specific module
-dkms install <module>/<version> -k $(uname -r)
+sudo dkms install <module>/<version> -k $(uname -r)
 ```
 
 ## Bootloader (GRUB) Management
 
 ### Check Status
+
 Displays:
+
 - Boot mode (UEFI/BIOS)
 - GRUB configuration location
 - Default boot entry
@@ -117,7 +190,9 @@ Displays:
 - Boot device
 
 ### Update Configuration
-Regenerates `grub.cfg` from `/etc/default/grub`:
+
+Regenerates `grub.cfg`:
+
 ```bash
 # Debian/Ubuntu
 sudo update-grub
@@ -130,15 +205,18 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ### Reinstall GRUB
+
 **Warning**: Can make system unbootable if done incorrectly!
 
 #### BIOS Systems
+
 ```bash
 sudo grub-install /dev/sdX
 sudo update-grub
 ```
 
 #### UEFI Systems
+
 ```bash
 sudo grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 sudo update-grub
@@ -147,14 +225,17 @@ sudo update-grub
 ## Network Repair
 
 ### Full Network Repair
+
 Performs:
-1. Restarts network services (NetworkManager/systemd-networkd)
-2. Flushes DNS cache
-3. Cycles network interfaces
+
+1. Restart network services
+2. Flush DNS cache
+3. Cycle network interfaces
 
 ### Individual Operations
 
 #### Restart Network Service
+
 ```bash
 sudo systemctl restart NetworkManager
 # or
@@ -162,6 +243,7 @@ sudo systemctl restart systemd-networkd
 ```
 
 #### Flush DNS Cache
+
 ```bash
 # systemd-resolved
 sudo resolvectl flush-caches
@@ -174,45 +256,46 @@ sudo systemctl restart dnsmasq
 ```
 
 ### Connectivity Test
-Checks:
-- Interface status
-- DNS resolution (google.com)
-- Internet connectivity (8.8.8.8, 1.1.1.1)
-- Configured DNS servers
+
+Tests performed:
+
+- Interface status (`ip link`)
+- DNS resolution (`ping google.com`)
+- Internet connectivity (`ping 8.8.8.8`, `ping 1.1.1.1`)
+- DNS server configuration
 
 ## Backup System
 
 ### Backup Types
 
-| Type | Contents | Location |
-|------|----------|----------|
+| Type | Contents | Storage |
+|------|----------|---------|
 | Config | .bashrc, .zshrc, .config/ | ~/.suite-backups/ |
 | Packages | Installed package list | ~/.suite-backups/ |
 | System | /etc/ configurations | ~/.suite-backups/ |
-| GRUB | Bootloader config | ~/.suite-backups/ |
+| GRUB | Bootloader configuration | ~/.suite-backups/ |
 
 ### Creating Backups
-```bash
-# Interactive
-# Navigate to: Recovery & Tools > Backup Manager
 
-# CLI
-ultimate-suite --recovery backup config
-ultimate-suite --recovery backup packages
-```
+From menu: Recovery & Tools > Backup Manager
 
-### Backup Location
-Default: `~/.suite-backups/`
+### Backup Files
 
-Files are named:
+Files are named with timestamps:
+
 - `config_backup_YYYYMMDD_HHMMSS.tar.gz`
 - `packages_backup_YYYYMMDD_HHMMSS.txt`
 - `system_backup_YYYYMMDD_HHMMSS.tar.gz`
 - `grub_backup_YYYYMMDD_HHMMSS.tar.gz`
 
+### Backup Location
+
+Default: `~/.suite-backups/`
+
 ## Restore System
 
-### Restoring from Backup
+### From Menu
+
 1. Navigate to: Recovery & Tools > Restore System
 2. Select backup file
 3. Confirm restoration
@@ -221,23 +304,27 @@ Files are named:
 ### Manual Restoration
 
 #### Configuration Backup
+
 ```bash
 cd ~
 tar -xzf ~/.suite-backups/config_backup_*.tar.gz
 ```
 
 #### Package List (Debian/Ubuntu)
+
 ```bash
 sudo dpkg --set-selections < packages_backup.txt
 sudo apt-get dselect-upgrade
 ```
 
 #### Package List (Fedora)
+
 ```bash
 sudo dnf install $(cat packages_backup.txt)
 ```
 
 #### Package List (Arch)
+
 ```bash
 sudo pacman -S --needed $(cat packages_backup.txt | awk '{print $1}')
 ```
@@ -245,19 +332,23 @@ sudo pacman -S --needed $(cat packages_backup.txt | awk '{print $1}')
 ## Disk Utilities
 
 ### Disk Usage
-Shows filesystem usage with df:
+
 ```bash
 df -h
 ```
 
 ### SMART Status
-Checks drive health (requires smartmontools):
+
+Check drive health (requires smartmontools):
+
 ```bash
 sudo smartctl -H /dev/sdX
 ```
 
 ### TRIM (SSD)
-Optimizes SSD storage:
+
+Optimize SSD storage:
+
 ```bash
 sudo fstrim -av
 ```
@@ -265,25 +356,13 @@ sudo fstrim -av
 ## System Logs
 
 ### View Options
-- **System Journal**: Recent systemd journal entries
-- **Boot Messages**: Current boot log
-- **Kernel Log**: dmesg output
-- **Recent Errors**: Priority error messages
 
-### Commands
-```bash
-# Journal
-journalctl -n 100
-
-# Boot log
-journalctl -b
-
-# Kernel log
-dmesg | tail -100
-
-# Errors only
-journalctl -p err -n 100
-```
+| Log | Command |
+|-----|---------|
+| System Journal | `journalctl -n 100` |
+| Boot Messages | `journalctl -b` |
+| Kernel Log | `dmesg \| tail -100` |
+| Errors Only | `journalctl -p err -n 100` |
 
 ## Best Practices
 
@@ -300,35 +379,72 @@ If the system won't boot:
 1. Boot from live USB
 2. Mount your partitions
 3. Chroot into the system:
-   ```bash
-   mount /dev/sdXn /mnt
-   mount --bind /dev /mnt/dev
-   mount --bind /proc /mnt/proc
-   mount --bind /sys /mnt/sys
-   chroot /mnt
-   ```
+
+```bash
+# Mount root partition
+mount /dev/sdXn /mnt
+
+# Mount required filesystems
+mount --bind /dev /mnt/dev
+mount --bind /proc /mnt/proc
+mount --bind /sys /mnt/sys
+
+# For UEFI systems
+mount /dev/sdXn /mnt/boot/efi
+
+# Chroot
+chroot /mnt
+```
+
 4. Run repairs (package manager, initramfs, GRUB)
-5. Exit and reboot
+5. Exit and reboot:
+
+```bash
+exit
+umount -R /mnt
+reboot
+```
 
 ## Troubleshooting
 
 ### Package Manager Locked
+
 ```bash
-# Remove lock files
-sudo rm /var/lib/apt/lists/lock
-sudo rm /var/cache/apt/archives/lock
-sudo rm /var/lib/dpkg/lock*
+# Debian/Ubuntu
+sudo rm -f /var/lib/apt/lists/lock
+sudo rm -f /var/cache/apt/archives/lock
+sudo rm -f /var/lib/dpkg/lock*
+
+# Fedora
+sudo rm -f /var/run/dnf.pid
+
+# Arch
+sudo rm -f /var/lib/pacman/db.lck
 ```
 
 ### System Won't Boot After Kernel Update
-1. Boot previous kernel from GRUB menu
+
+1. Boot previous kernel from GRUB menu (hold Shift during boot)
 2. Rebuild initramfs
 3. Rebuild DKMS modules
-4. Update GRUB
+4. Update GRUB configuration
 
 ### Network Not Working
+
 1. Check interface is up: `ip link`
 2. Check for IP address: `ip addr`
 3. Test DNS: `ping google.com`
 4. Test connectivity: `ping 8.8.8.8`
 5. Restart network services
+
+## Quick Reference
+
+| Task | Menu Path |
+|------|-----------|
+| Health check | Recovery & Tools > System Health Check |
+| Fix packages | Recovery & Tools > Repair Tools > Package Manager |
+| Rebuild initramfs | Recovery & Tools > Repair Tools > Regenerate Initramfs |
+| GRUB tools | Recovery & Tools > Repair Tools > Bootloader |
+| Network repair | Recovery & Tools > Repair Tools > Network |
+| Create backup | Recovery & Tools > Backup Manager |
+| Restore backup | Recovery & Tools > Restore System |

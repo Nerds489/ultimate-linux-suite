@@ -1,7 +1,7 @@
 Name:           ultimate-linux-suite
 Version:        1.0.0
 Release:        1%{?dist}
-Summary:        Comprehensive Linux system optimization and management toolkit
+Summary:        Comprehensive Linux system optimization, application management, and recovery toolkit
 
 License:        MIT
 URL:            https://github.com/Nerds489/ultimate-linux-suite
@@ -25,18 +25,46 @@ Suggests:       dkms
 Suggests:       kernel-devel
 
 %description
-Ultimate Linux Suite is a modular, distribution-agnostic toolkit for
-Linux system optimization, application management, driver installation,
-and system recovery.
+Ultimate Linux Suite is a modular, distribution-agnostic toolkit for Linux
+system optimization, application management, driver installation, and system
+recovery. It provides an interactive text-based interface for managing
+various aspects of your Linux system.
 
-Features include:
-* Multi-distribution support (Debian, Ubuntu, Fedora, Arch, openSUSE)
-* Hardware detection and optimization
-* System performance tuning
-* Application installation with queue management
-* Driver management (Realtek, Broadcom, GPU guidance)
-* System recovery and repair tools
-* Backup and restore functionality
+Core Features:
+* OS detection engine with automatic distribution backend loading
+* Hardware detection for CPU, GPU, storage, memory, and network devices
+* Interactive TUI menu system powered by dialog
+
+System Optimization:
+* Multiple optimization profiles (desktop, server, laptop, gaming, VM)
+* Automatic hardware-based optimization recommendations
+* Kernel parameter tuning via sysctl
+* I/O scheduler optimization for SSDs and HDDs
+* CPU governor configuration
+
+Application Management:
+* Queue-based batch installation system
+* Pre-configured application presets (gaming, developer, creator, minimal)
+* Native package manager support (apt, dnf, pacman, zypper)
+* Flatpak and Snap integration
+
+Driver Management:
+* Realtek USB network adapter support (r8152, r8821cu)
+* Broadcom WiFi driver installation
+* DKMS kernel module management
+* GPU driver guidance for NVIDIA, AMD, and Intel
+* Offline driver vault for air-gapped installations
+
+Recovery Tools:
+* System health diagnostics
+* Package manager repair utilities
+* Initramfs and bootloader (GRUB) management
+* Network troubleshooting and repair
+* Configuration and package list backup/restore
+
+Commands:
+* Primary: ultimate-linux-suite
+* Alias: ultimate-suite
 
 %prep
 %setup -q
@@ -151,20 +179,16 @@ echo "Run 'ultimate-linux-suite' or 'ultimate-suite' to start."
 
 %changelog
 * Wed Dec 11 2024 Nerds489 <support@ultimate-linux-suite.io> - 1.0.0-1
-- Initial release
-- Core system optimization engine
-- Multi-distribution support
-- Hardware detection and profiling
-- System performance tuning
-- Application installer with queue management
+- Version 1.0.0 release
+- OS detection engine with automatic backend loading
+- Hardware detection (CPU, GPU, storage, memory, network)
+- System optimization profiles (desktop, server, laptop, gaming, VM)
+- Application installer with queue management and presets
 - Flatpak and Snap integration
-- Driver management for Realtek and Broadcom
-- GPU driver guidance
-- DKMS module management
-- System recovery and repair tools
-- Package manager repair utilities
-- Initramfs regeneration support
-- Bootloader management
-- Network repair tools
-- System health checks
+- Driver management (Realtek, Broadcom, GPU guidance)
+- DKMS kernel module management
+- Recovery tools (package repair, initramfs, GRUB, network)
 - Backup and restore functionality
+- Local build system (build.sh, Makefile)
+- GitHub Actions packaging workflow
+- Shell completions for Bash, Zsh, and Fish

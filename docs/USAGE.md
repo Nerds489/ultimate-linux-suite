@@ -1,225 +1,243 @@
 # Ultimate Linux Suite - Usage Guide
 
+This guide covers command-line options, menu navigation, and general usage of Ultimate Linux Suite.
+
 ## Running the Suite
 
-### Basic Usage
+### Installed via Package
 
 ```bash
-# Run the suite
-./suite.sh
+# Primary command
+sudo ultimate-linux-suite
 
-# Or from any location
-/path/to/ultimate-linux-suite/suite.sh
+# Alias command (shorter)
+sudo ultimate-suite
 ```
 
-### Command Line Options
+### Running from Source
+
+```bash
+# From the repository directory
+sudo ./suite.sh
+
+# From any location
+sudo /path/to/ultimate-linux-suite/suite.sh
+```
+
+## Command-Line Options
 
 | Option | Description |
 |--------|-------------|
-| `-h, --help` | Show help message |
-| `-v, --version` | Show version information |
+| `-h`, `--help` | Display help message and exit |
+| `-v`, `--version` | Display version information and exit |
 | `--no-color` | Disable colored output |
-| `--debug` | Enable debug logging |
-| `--log-file FILE` | Write logs to specified file |
-| `--no-welcome` | Skip welcome screen |
+| `--debug` | Enable debug logging (verbose output) |
+| `--log-file FILE` | Write logs to the specified file |
+| `--no-welcome` | Skip the welcome screen |
 
 ### Examples
 
 ```bash
+# Show help
+ultimate-linux-suite --help
+
+# Show version
+ultimate-linux-suite --version
+
 # Run with debug output
-./suite.sh --debug
+sudo ultimate-linux-suite --debug
 
-# Log to file
-./suite.sh --log-file ~/suite.log
-
-# Run without colors (for scripts)
-./suite.sh --no-color
+# Log all output to a file
+sudo ultimate-linux-suite --log-file ~/suite.log
 
 # Combine options
-./suite.sh --debug --log-file /tmp/debug.log
+sudo ultimate-linux-suite --debug --log-file /tmp/debug.log
+
+# Skip welcome screen
+sudo ultimate-linux-suite --no-welcome
+
+# Run without colors (useful for scripts or logging)
+sudo ultimate-linux-suite --no-color
 ```
 
 ## Main Menu Navigation
 
-The suite presents a text-based menu interface:
+When launched, the suite presents an interactive text-based menu:
 
 ```
 ╔════════════════════════════════════════════════════════════════╗
-║  Main Menu                                                      ║
+║  Ultimate Linux Suite - Main Menu                              ║
 ╠════════════════════════════════════════════════════════════════╣
-║                                                                  ║
-║   1) System Optimization                                        ║
-║   2) Application Installer                                      ║
-║   3) Driver Manager                                             ║
-║   4) Recovery & Tools                                           ║
-║   5) System Information                                         ║
-║   0) Exit                                                       ║
-║                                                                  ║
+║                                                                ║
+║   1) System Optimization                                       ║
+║   2) Application Installer                                     ║
+║   3) Driver Manager                                            ║
+║   4) Recovery & Tools                                          ║
+║   5) System Information                                        ║
+║   0) Exit                                                      ║
+║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 
-If `dialog` or `whiptail` is installed, you'll get an enhanced graphical menu.
+### Menu Interface
 
-## System Optimization
+If `dialog` is installed, you get an enhanced graphical TUI. Otherwise, the suite falls back to a basic text interface that works in any terminal.
 
-### Optimization Profiles
+### Navigation Keys
 
-Pre-configured profiles for common use cases:
+| Key | Action |
+|-----|--------|
+| `↑` / `↓` | Navigate menu items |
+| `Enter` | Select highlighted item |
+| `Tab` | Switch between buttons (OK/Cancel) |
+| `Esc` | Go back / Cancel |
+| Number keys | Quick select menu item |
 
-| Profile | Use Case | Settings |
-|---------|----------|----------|
-| Desktop | General use | Balanced swappiness, schedutil governor |
-| Gaming | Low latency | Low swappiness, performance governor |
-| Server | Throughput | Moderate swappiness, ondemand governor |
-| Laptop | Battery | Power-saving governor |
-| Workstation | Productivity | Balanced with performance bias |
-| Minimal | Low resources | High swappiness, conservative settings |
+## Menu Sections
 
-### Kernel Tweaks
+### 1. System Optimization
 
-- **Swappiness** - Control memory swapping behavior (0-100)
-- **I/O Scheduler** - Select optimal scheduler for your storage
-- **Huge Pages** - Configure huge page support
-- **Sysctl Settings** - Apply kernel parameter optimizations
+Access system performance tuning:
 
-### Service Manager
+- **Auto Optimize**: Automatically apply optimizations based on detected hardware
+- **Select Profile**: Choose from desktop, server, laptop, gaming, or VM profiles
+- **Kernel Tweaks**: Manually configure swappiness, I/O schedulers, and sysctl parameters
+- **Service Manager**: Enable/disable system services
 
-- List running services
-- Disable unnecessary services
-- Enable recommended services
+See [OPTIMIZATION.md](OPTIMIZATION.md) for detailed information.
 
-## Application Installer
+### 2. Application Installer
 
-### Using Presets
+Install applications with queue management:
 
-Presets install curated sets of applications:
+- **Browse Categories**: Select apps by category (browsers, media, development, etc.)
+- **Use Presets**: Install curated application bundles (gaming, developer, creator)
+- **Manage Queue**: Review and execute pending installations
+- **Flatpak/Snap**: Install from alternative package sources
 
-| Preset | Applications |
-|--------|-------------|
-| Gaming | Steam, Lutris, Wine, GameMode |
-| Developer | Git, VS Code, Docker, Python, Node.js |
-| Creator | GIMP, Blender, OBS, Audacity |
-| Minimal | Vim, htop, curl, git |
-| Office | LibreOffice, Thunderbird |
+See [APPS.md](APPS.md) for detailed information.
 
-### Installing by Category
+### 3. Driver Manager
 
-Browse and install applications by category:
-- Web Browsers
-- Media Players
-- Graphics & Design
-- Development Tools
-- Office Applications
-- Utilities
-- Games
+Hardware detection and driver installation:
 
-### Flatpak Support
+- **Scan Hardware**: Detect GPUs, WiFi adapters, and other devices
+- **Install Drivers**: Realtek, Broadcom, and other supported hardware
+- **GPU Guidance**: Non-aggressive guidance for NVIDIA/AMD/Intel drivers
+- **DKMS Management**: Rebuild kernel modules
 
-The suite supports Flatpak applications:
-- Install Flatpak apps
-- List installed Flatpaks
-- Update all Flatpaks
+See [DRIVERS.md](DRIVERS.md) for detailed information.
 
-## Driver Manager
+### 4. Recovery & Tools
 
-### Hardware Detection
+System repair and maintenance:
 
-The suite detects:
-- GPU (NVIDIA/AMD/Intel)
-- WiFi chipset
-- Audio subsystem
-- Storage type
+- **Health Check**: Comprehensive system diagnostics
+- **Package Repair**: Fix broken packages and dependencies
+- **Initramfs**: Regenerate initial ramdisk
+- **GRUB Tools**: Bootloader management
+- **Network Repair**: Fix connectivity issues
+- **Backup/Restore**: Configuration and package list backup
 
-### GPU Drivers
+See [RECOVERY.md](RECOVERY.md) for detailed information.
 
-| Vendor | Options |
-|--------|---------|
-| NVIDIA | Proprietary (recommended), Nouveau |
-| AMD | Mesa/AMDGPU (open), AMDGPU Pro |
-| Intel | i915 (built-in) |
+### 5. System Information
 
-### WiFi Drivers
+View detected system information:
 
-Supported chipsets:
-- Broadcom
-- Realtek
-- Intel
-- Atheros/Qualcomm
+- Distribution and version
+- Kernel version
+- CPU details (vendor, model, cores)
+- GPU information
+- Memory and swap
+- Storage devices
+- Network interfaces
 
-### Auto-Install
+## Running as Root
 
-On supported systems (Ubuntu with ubuntu-drivers), automatic driver installation is available.
-
-## Recovery & Tools
-
-### Backup Manager
-
-- **Home Directory** - Backup user files
-- **System Backup** - Full system backup
-- **Package List** - Export installed packages
-- **Configurations** - Backup config files
-
-### Restore
-
-- Restore from backups
-- Reinstall packages from exported list
-
-### Repair Tools
-
-- Fix package manager issues
-- Repair broken dependencies
-- Reset network configuration
-
-### Disk Utilities
-
-- View disk usage
-- Check SMART status
-- Run TRIM (SSD)
-- Filesystem check
-
-### System Logs
-
-View various system logs:
-- System journal
-- Boot messages
-- Kernel log (dmesg)
-- Authentication log
-
-## Tips
-
-### Running as Root
-
-Some operations require root privileges. The suite will use `sudo` when needed. For full functionality:
+Most operations require root privileges. The suite uses `sudo` when needed, but for full functionality:
 
 ```bash
-sudo ./suite.sh
+sudo ultimate-linux-suite
 ```
 
-### Logging
+If run without root, the suite will prompt for elevation when required.
 
-Enable debug logging to troubleshoot issues:
+## Logging
+
+### Debug Mode
+
+Enable verbose output to troubleshoot issues:
 
 ```bash
-./suite.sh --debug --log-file ~/suite-debug.log
+sudo ultimate-linux-suite --debug
 ```
 
-### Headless Systems
+### Log to File
 
-For systems without dialog/whiptail, the suite falls back to a text-based interface that works in any terminal.
-
-### Scripting
-
-Use `--no-color` when capturing output:
+Capture all output for later review:
 
 ```bash
-./suite.sh --no-color 2>&1 | tee output.log
+sudo ultimate-linux-suite --log-file ~/suite-$(date +%Y%m%d).log
+```
+
+### Combined Debug and File Logging
+
+```bash
+sudo ultimate-linux-suite --debug --log-file ~/debug.log
+```
+
+## Headless and Script Usage
+
+### Disable Colors
+
+For scripts or when piping output:
+
+```bash
+sudo ultimate-linux-suite --no-color 2>&1 | tee output.log
+```
+
+### Non-Interactive Mode
+
+The suite is designed for interactive use. For automation, consider using the underlying system commands directly or scripting around specific menu operations.
+
+## Shell Completions
+
+The suite includes shell completions for tab-completion of commands and options.
+
+### Bash
+
+Completions are installed to `/etc/bash_completion.d/` when using packages.
+
+For manual installation:
+```bash
+source completions/ultimate-linux-suite.bash
+```
+
+### Zsh
+
+Completions are installed to `/usr/share/zsh/site-functions/`.
+
+For manual installation:
+```bash
+fpath=(completions $fpath)
+compinit
+```
+
+### Fish
+
+Completions are installed to `/usr/share/fish/vendor_completions.d/`.
+
+For manual installation:
+```bash
+cp completions/ultimate-linux-suite.fish ~/.config/fish/completions/
 ```
 
 ## Troubleshooting
 
 ### Menu Not Displaying Correctly
 
-Install dialog for better menus:
+Install the dialog package:
 
 ```bash
 # Debian/Ubuntu
@@ -230,6 +248,9 @@ sudo dnf install dialog
 
 # Arch
 sudo pacman -S dialog
+
+# openSUSE
+sudo zypper install dialog
 ```
 
 ### Permission Denied
@@ -240,17 +261,23 @@ Ensure the script is executable:
 chmod +x suite.sh
 ```
 
-### Backend Not Loading
-
-Check OS detection:
+Run with sudo:
 
 ```bash
-./suite.sh --debug 2>&1 | grep -i "backend\|os_id"
+sudo ./suite.sh
 ```
 
-### Package Installation Fails
+### Backend Not Loading
 
-Verify package manager is working:
+Check OS detection with debug mode:
+
+```bash
+sudo ultimate-linux-suite --debug 2>&1 | grep -i "backend\|os_id\|distro"
+```
+
+### Package Operations Fail
+
+Verify the package manager is working:
 
 ```bash
 # Debian/Ubuntu
@@ -261,4 +288,22 @@ sudo dnf check-update
 
 # Arch
 sudo pacman -Sy
+
+# openSUSE
+sudo zypper refresh
 ```
+
+### Terminal Too Small
+
+The TUI requires a minimum terminal size. Resize your terminal window or use a larger console.
+
+## Quick Reference
+
+| Task | Command |
+|------|---------|
+| Launch interactive menu | `sudo ultimate-linux-suite` |
+| Show help | `ultimate-linux-suite --help` |
+| Show version | `ultimate-linux-suite --version` |
+| Debug mode | `sudo ultimate-linux-suite --debug` |
+| Log to file | `sudo ultimate-linux-suite --log-file FILE` |
+| No colors | `ultimate-linux-suite --no-color` |

@@ -1,26 +1,44 @@
-# Ultimate Linux Suite
+# Ultimate Linux Suite Documentation
 
-A comprehensive, modular Linux system optimization and management toolkit.
+Welcome to the Ultimate Linux Suite documentation. This guide provides comprehensive information about the toolkit's architecture, features, and usage.
 
-## Features
+## Overview
 
-- **System Optimization** - Kernel tweaks, service management, storage optimization
-- **Application Installer** - Curated presets and package management across distros
-- **Driver Manager** - GPU, WiFi, audio driver detection and installation
-- **Recovery Tools** - Backup, restore, and system repair utilities
+Ultimate Linux Suite is a modular, distribution-agnostic toolkit for Linux system optimization, application management, driver installation, and system recovery. It provides both an interactive TUI (Text User Interface) and command-line options for all operations.
+
+### Commands
+
+| Command | Description |
+|---------|-------------|
+| `ultimate-linux-suite` | Primary command (installed via package) |
+| `ultimate-suite` | Alias command (shorter alternative) |
+| `./suite.sh` | Direct execution from source |
+
+## Documentation Index
+
+| Document | Description |
+|----------|-------------|
+| [USAGE.md](USAGE.md) | Command-line options, menu navigation, and general usage |
+| [OPTIMIZATION.md](OPTIMIZATION.md) | System optimization profiles, sysctl parameters, I/O schedulers |
+| [APPS.md](APPS.md) | Application installer, presets, Flatpak/Snap support |
+| [DRIVERS.md](DRIVERS.md) | Driver management for Realtek, Broadcom, and GPU guidance |
+| [RECOVERY.md](RECOVERY.md) | System repair, backup/restore, bootloader management |
 
 ## Supported Distributions
 
 ### Debian Family
-- Debian
-- Ubuntu / Pop!_OS / Elementary OS
-- Linux Mint / LMDE
+- Debian 10+ (Buster, Bullseye, Bookworm)
+- Ubuntu 20.04+ (Focal, Jammy, Noble)
+- Linux Mint 20+
 - Kali Linux
 - Parrot OS
 
 ### Fedora Family
-- Fedora
-- RHEL / CentOS / Rocky / AlmaLinux
+- Fedora 38+
+- RHEL 8+
+- CentOS Stream 8+
+- Rocky Linux 8+
+- AlmaLinux 8+
 
 ### Arch Family
 - Arch Linux
@@ -28,158 +46,181 @@ A comprehensive, modular Linux system optimization and management toolkit.
 - EndeavourOS
 
 ### SUSE Family
-- openSUSE Leap
+- openSUSE Leap 15+
 - openSUSE Tumbleweed
 
-## Requirements
+## System Requirements
 
-- Bash 4.0 or higher
-- Standard Linux utilities (grep, sed, awk)
-- dialog or whiptail (optional, for enhanced menus)
-- Root privileges for system modifications
+### Required
+| Component | Requirement |
+|-----------|-------------|
+| Shell | Bash 4.0 or higher |
+| TUI | dialog package |
+| Utilities | coreutils, procps, util-linux |
+| Privileges | Root access for system modifications |
 
-## Installation
+### Recommended
+| Component | Purpose |
+|-----------|---------|
+| pciutils | PCI device detection (`lspci`) |
+| usbutils | USB device detection (`lsusb`) |
+| dmidecode | System hardware information |
+| lshw | Detailed hardware listing |
 
-```bash
-# Clone or download the suite
-git clone https://github.com/yourusername/ultimate-linux-suite.git
-
-# Or extract the archive
-tar -xzf ultimate-linux-suite.tar.gz
-
-# Make executable
-chmod +x ultimate-linux-suite/suite.sh
-
-# Run
-./ultimate-linux-suite/suite.sh
-```
-
-## Quick Start
-
-```bash
-# Run with default settings
-./suite.sh
-
-# Show help
-./suite.sh --help
-
-# Run with debug logging
-./suite.sh --debug
-
-# Disable colors for script output
-./suite.sh --no-color
-
-# Log to file
-./suite.sh --log-file /path/to/logfile.log
-```
-
-## Project Structure
-
-```
-ultimate-linux-suite/
-├── suite.sh              # Main entry point
-├── lib/                  # Core libraries
-│   ├── logging.sh        # Logging functions
-│   ├── utils.sh          # Utility functions
-│   ├── os_detect.sh      # OS detection
-│   ├── hardware_detect.sh# Hardware detection
-│   ├── pkg.sh            # Package management
-│   └── menu.sh           # Menu framework
-├── modules/              # Functional modules
-│   ├── optimize.sh       # Optimization functions
-│   ├── apps.sh           # Application installer
-│   ├── drivers.sh        # Driver management
-│   ├── recovery.sh       # Recovery tools
-│   └── setup_profiles.sh # Configuration profiles
-├── backends/             # OS-specific implementations
-│   ├── debian.sh
-│   ├── ubuntu.sh
-│   ├── fedora.sh
-│   ├── arch.sh
-│   └── ...
-├── menus/                # Menu implementations
-│   ├── main_menu.sh
-│   ├── optimize_menu.sh
-│   └── ...
-├── configs/              # Configuration files
-│   ├── optimization_profiles.conf
-│   └── app_presets/
-└── docs/                 # Documentation
-    ├── README.md
-    └── USAGE.md
-```
+### Optional
+| Component | Purpose |
+|-----------|---------|
+| flatpak | Flatpak application support |
+| snapd | Snap package support |
+| dkms | Dynamic kernel module compilation |
 
 ## Architecture
 
-The suite uses a modular architecture:
+### Modular Design
 
-1. **Libraries** (`lib/`) - Core functionality shared across all components
-2. **Backends** (`backends/`) - OS-specific implementations
-3. **Modules** (`modules/`) - Feature implementations
-4. **Menus** (`menus/`) - User interface components
-5. **Configs** (`configs/`) - Configuration files and presets
+```
+┌─────────────────────────────────────────────────────────┐
+│                      suite.sh                           │
+│                   (Main Entry Point)                    │
+└─────────────────────┬───────────────────────────────────┘
+                      │
+        ┌─────────────┴─────────────┐
+        ▼                           ▼
+┌───────────────┐           ┌───────────────┐
+│     lib/      │           │   backends/   │
+│  Core Libs    │           │  OS-Specific  │
+├───────────────┤           ├───────────────┤
+│ logging.sh    │           │ debian.sh     │
+│ utils.sh      │           │ ubuntu.sh     │
+│ os_detect.sh  │           │ fedora.sh     │
+│ hardware.sh   │           │ arch.sh       │
+│ pkg.sh        │           │ opensuse.sh   │
+│ menu.sh       │           │ ...           │
+└───────────────┘           └───────────────┘
+        │
+        ▼
+┌───────────────────────────────────────────────────────┐
+│                      modules/                          │
+│                  Feature Modules                       │
+├───────────────┬───────────────┬───────────────────────┤
+│ optimize.sh   │ apps.sh       │ drivers.sh            │
+│ recovery.sh   │ setup_profiles│                       │
+└───────────────┴───────────────┴───────────────────────┘
+        │
+        ▼
+┌───────────────────────────────────────────────────────┐
+│                       menus/                           │
+│                  User Interface                        │
+├───────────────┬───────────────┬───────────────────────┤
+│ main_menu.sh  │ optimize_menu │ apps_menu.sh          │
+│ drivers_menu  │ recovery_menu │                       │
+└───────────────┴───────────────┴───────────────────────┘
+```
 
-### OS Detection
+### Component Responsibilities
 
-The suite automatically detects:
-- Distribution ID and family
-- Version information
-- Package manager
-- Loads appropriate backend
+| Component | Responsibility |
+|-----------|----------------|
+| **lib/** | Core utilities, logging, OS/hardware detection, package abstraction |
+| **backends/** | Distribution-specific package names and commands |
+| **modules/** | Feature implementations (optimization, apps, drivers, recovery) |
+| **menus/** | Interactive TUI menu implementations |
+| **configs/** | Configuration files and application presets |
+| **drivers/** | Driver source vault for offline installation |
+
+### OS Detection Flow
+
+1. Read `/etc/os-release` for distribution ID
+2. Match against known distribution families
+3. Load appropriate backend from `backends/`
+4. Initialize distribution-specific functions
 
 ### Hardware Detection
 
-Detected hardware includes:
-- CPU (vendor, model, cores, capabilities)
-- GPU (vendor, type, driver)
-- Memory (RAM, swap)
-- Storage (type, filesystem)
-- Network interfaces
-- Form factor (laptop/desktop/server/VM)
+The hardware detection engine identifies:
 
-## Customization
+| Hardware | Detection Method |
+|----------|------------------|
+| CPU | `/proc/cpuinfo`, `lscpu` |
+| GPU | `lspci`, driver modules |
+| Storage | `lsblk`, `/sys/block/` |
+| Memory | `/proc/meminfo` |
+| Network | `ip link`, `lspci`, `lsusb` |
+| Form Factor | DMI data, battery presence |
 
-### Adding New Backends
+## Configuration Files
 
-Create a new file in `backends/` following the template:
+### Optimization Profiles
 
-```bash
-#!/usr/bin/env bash
-# myos.sh - Custom Backend
-
-readonly BACKEND_NAME="myos"
-
-backend_init() {
-    log_info "Initializing MyOS backend"
-}
-
-backend_install_packages() {
-    # Implementation
-}
-
-backend_post_setup() {
-    # Implementation
-}
-```
-
-### Adding Application Presets
-
-Create a new `.conf` file in `configs/app_presets/`:
+Located at `configs/optimization_profiles.conf`:
 
 ```ini
-[preset]
-name=My Preset
-description=Custom application set
+[desktop]
+swappiness=10
+vfs_cache_pressure=50
+dirty_ratio=20
+...
 
-[packages]
-package1=Description
-package2=Description
+[server]
+swappiness=1
+vfs_cache_pressure=100
+dirty_ratio=40
+...
 ```
+
+### Application Presets
+
+Located at `configs/app_presets/`:
+
+| Preset | Description |
+|--------|-------------|
+| `gaming.conf` | Steam, Lutris, Wine, GameMode |
+| `developer.conf` | Git, Docker, VS Code, build tools |
+| `creator.conf` | GIMP, Blender, OBS, Kdenlive |
+| `minimal.conf` | Essential CLI utilities |
+
+## Building and Packaging
+
+### Local Build System
+
+```bash
+# Build Debian package
+./build.sh deb
+
+# Build RPM package
+./build.sh rpm
+
+# Build all packages
+./build.sh all
+
+# Clean build artifacts
+./build.sh clean
+```
+
+### Makefile Targets
+
+```bash
+make deb      # Build .deb
+make rpm      # Build .rpm
+make all      # Build all
+make clean    # Clean artifacts
+```
+
+### GitHub Actions
+
+Push a version tag to trigger automatic package builds:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+## Getting Help
+
+- **In-app help**: `ultimate-linux-suite --help`
+- **Repository**: https://github.com/Nerds489/ultimate-linux-suite
+- **Issues**: https://github.com/Nerds489/ultimate-linux-suite/issues
 
 ## License
 
-MIT License
-
-## Contributing
-
-Contributions are welcome. Please submit issues and pull requests.
+Ultimate Linux Suite is released under the MIT License. See [LICENSE](../LICENSE) for details.
