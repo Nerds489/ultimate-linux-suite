@@ -87,7 +87,7 @@ install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_sysconfdir}/bash_completion.d
 install -d %{buildroot}%{_datadir}/zsh/site-functions
 install -d %{buildroot}%{_datadir}/fish/vendor_completions.d
-# Doc directory created automatically by %doc directive
+install -d %{buildroot}%{_docdir}/%{name}
 
 # Install main script
 install -m 755 suite.sh %{buildroot}%{_datadir}/%{name}/suite.sh
@@ -154,12 +154,25 @@ if [ -f completions/ultimate-suite.fish ]; then
         %{buildroot}%{_datadir}/fish/vendor_completions.d/ultimate-suite.fish
 fi
 
-# Documentation is handled by %doc directive in %files section
-# Do NOT manually install docs here to avoid duplicate file entries
+# Install documentation to avoid %doc directive confusion
+# Manually installing ensures we know exactly where files go
+install -m 644 README.md %{buildroot}%{_docdir}/%{name}/
+install -m 644 CHANGELOG.md %{buildroot}%{_docdir}/%{name}/
+install -m 644 docs/APPS.md %{buildroot}%{_docdir}/%{name}/
+install -m 644 docs/DRIVERS.md %{buildroot}%{_docdir}/%{name}/
+install -m 644 docs/OPTIMIZATION.md %{buildroot}%{_docdir}/%{name}/
+install -m 644 docs/RECOVERY.md %{buildroot}%{_docdir}/%{name}/
+install -m 644 docs/USAGE.md %{buildroot}%{_docdir}/%{name}/
 
 %files
 %license LICENSE
-%doc README.md CHANGELOG.md docs/APPS.md docs/DRIVERS.md docs/OPTIMIZATION.md docs/RECOVERY.md docs/USAGE.md
+%doc %{_docdir}/%{name}/README.md
+%doc %{_docdir}/%{name}/CHANGELOG.md
+%doc %{_docdir}/%{name}/APPS.md
+%doc %{_docdir}/%{name}/DRIVERS.md
+%doc %{_docdir}/%{name}/OPTIMIZATION.md
+%doc %{_docdir}/%{name}/RECOVERY.md
+%doc %{_docdir}/%{name}/USAGE.md
 %{_bindir}/ultimate-linux-suite
 %{_bindir}/ultimate-suite
 %{_datadir}/%{name}/

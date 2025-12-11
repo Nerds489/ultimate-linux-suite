@@ -17,7 +17,14 @@ cd "$SCRIPT_DIR"
 
 # Package info
 PKG_NAME="ultimate-linux-suite"
-PKG_VERSION="1.0.0"
+
+# Read version from VERSION file (single source of truth)
+if [[ -f "$SCRIPT_DIR/VERSION" ]]; then
+    PKG_VERSION="$(cat "$SCRIPT_DIR/VERSION" | tr -d '[:space:]')"
+else
+    PKG_VERSION="1.0.0"
+    echo "Warning: VERSION file not found, using default $PKG_VERSION" >&2
+fi
 
 # Color output (fallback gracefully)
 setup_colors() {
@@ -90,6 +97,14 @@ EOF
 # Build .deb package
 build_deb() {
     log_info "Building .deb package..."
+
+    # RECURSION GUARD: Prevent infinite loop when called from within dpkg-buildpackage.
+    # dpkg-buildpackage sets DEB_BUILD_ARCH. If set, we're already inside a Debian build.
+    if [[ -n "${DEB_BUILD_ARCH:-}" ]]; then
+        log_info "Detected DEB_BUILD_ARCH='$DEB_BUILD_ARCH' - already inside dpkg-buildpackage."
+        log_info "Skipping nested dpkg-buildpackage call to prevent recursion."
+        return 0
+    fi
 
     # Check for dpkg-buildpackage
     if ! command -v dpkg-buildpackage &>/dev/null; then

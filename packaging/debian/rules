@@ -5,8 +5,18 @@
 %:
 	dh $@
 
+# Use our custom cleaner but never fail if it finds nothing.
 override_dh_auto_clean:
 	./build.sh clean || true
+
+# CRITICAL: DO NOT let debhelper call `make` which would re-run build.sh all.
+# This prevents infinite recursion: dpkg-buildpackage -> dh -> make -> build.sh -> dpkg-buildpackage
+override_dh_auto_build:
+	@echo "Skipping dh_auto_build (handled by build.sh / external tooling)."
+
+# No tests for now
+override_dh_auto_test:
+	@echo "Skipping dh_auto_test."
 
 override_dh_auto_install:
 	# Create installation directories
