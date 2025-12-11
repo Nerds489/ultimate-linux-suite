@@ -171,7 +171,6 @@ fi
 %{_datadir}/zsh/site-functions/_ultimate-suite
 %{_datadir}/fish/vendor_completions.d/ultimate-linux-suite.fish
 %{_datadir}/fish/vendor_completions.d/ultimate-suite.fish
-%{_docdir}/%{name}/
 
 %post
 echo "Ultimate Linux Suite installed successfully."
