@@ -5,6 +5,10 @@
 %:
 	dh $@
 
+override_dh_auto_clean:
+	@echo "Skipping auto clean (not needed for shell-only project)"
+	true
+
 override_dh_auto_install:
 	# Create installation directories
 	install -d $(DESTDIR)/usr/share/ultimate-linux-suite

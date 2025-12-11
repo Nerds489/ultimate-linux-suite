@@ -87,7 +87,7 @@ install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_sysconfdir}/bash_completion.d
 install -d %{buildroot}%{_datadir}/zsh/site-functions
 install -d %{buildroot}%{_datadir}/fish/vendor_completions.d
-install -d %{buildroot}%{_docdir}/%{name}
+# Doc directory created automatically by %doc directive
 
 # Install main script
 install -m 755 suite.sh %{buildroot}%{_datadir}/%{name}/suite.sh
@@ -154,14 +154,11 @@ if [ -f completions/ultimate-suite.fish ]; then
         %{buildroot}%{_datadir}/fish/vendor_completions.d/ultimate-suite.fish
 fi
 
-# Install documentation
-if [ -d docs ]; then
-    cp -r docs/* %{buildroot}%{_docdir}/%{name}/
-fi
+# Documentation handled via %doc directive in %files section
 
 %files
 %license LICENSE
-%doc README.md CHANGELOG.md
+%doc README.md CHANGELOG.md docs/APPS.md docs/DRIVERS.md docs/OPTIMIZATION.md docs/README.md docs/RECOVERY.md docs/USAGE.md
 %{_bindir}/ultimate-linux-suite
 %{_bindir}/ultimate-suite
 %{_datadir}/%{name}/
